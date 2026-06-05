@@ -1,0 +1,31 @@
+.portfolio-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 20px;
+  min-width: 220px;
+}
+
+.portfolio-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.portfolio-card-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.portfolio-card-header p {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.portfolio-card-description {
+  margin: 12px 0 0;
+  color: #4b5563;
+  line-height: 1.5;
+}

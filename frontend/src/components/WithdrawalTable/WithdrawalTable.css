@@ -1,0 +1,28 @@
+.withdrawal-table-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.withdrawal-table-card h2 {
+  margin: 0 0 16px;
+  font-size: 1.2rem;
+}
+
+.withdrawal-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.withdrawal-table th,
+.withdrawal-table td {
+  text-align: left;
+  padding: 12px 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.withdrawal-table th {
+  color: #374151;
+  font-weight: 600;
+}
