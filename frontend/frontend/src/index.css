@@ -1,111 +1,127 @@
+/* index.css: global design tokens, theme, and base element styles. */
+
+/* :root holds CSS custom properties (design tokens) and global typography. */
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
+  --text: #6b6375; /* Default body text color */
+  --text-h: #08060d; /* Heading / high-contrast text color */
+  --bg: #fff; /* Page background color */
+  --border: #e5e4e7; /* Divider / border color */
+  --code-bg: #f4f3ec; /* Inline <code> background */
+  --accent: #aa3bff; /* Primary accent color */
+  --accent-bg: rgba(170, 59, 255, 0.1); /* Accent background tint */
+  --accent-border: rgba(170, 59, 255, 0.5); /* Accent border tint */
+  --social-bg: rgba(244, 243, 236, 0.5); /* Social chip background */
   --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px; /* Elevation shadow */
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif; /* Body font stack */
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif; /* Heading font stack */
+  --mono: ui-monospace, Consolas, monospace; /* Monospace font stack */
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font: 18px/145% var(--sans); /* Base font size, line height, and family */
+  letter-spacing: 0.18px; /* Slight tracking for readability */
+  color-scheme: light dark; /* Opt into light and dark UA styling */
+  color: var(--text); /* Default text color */
+  background: var(--bg); /* Default background color */
+  font-synthesis: none; /* Disable synthetic bold/italic */
+  text-rendering: optimizeLegibility; /* Prefer legibility when rendering */
+  -webkit-font-smoothing: antialiased; /* Smoother fonts on WebKit */
+  -moz-osx-font-smoothing: grayscale; /* Smoother fonts on Firefox/macOS */
 
+  /* Slightly smaller base font on smaller screens. */
   @media (max-width: 1024px) {
-    font-size: 16px;
+    font-size: 16px; /* Reduced base size on mobile */
   }
 }
 
+/* Dark theme overrides applied when the OS prefers a dark color scheme. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
+    --text: #9ca3af; /* Dark-mode body text */
+    --text-h: #f3f4f6; /* Dark-mode heading text */
+    --bg: #16171d; /* Dark-mode background */
+    --border: #2e303a; /* Dark-mode border */
+    --code-bg: #1f2028; /* Dark-mode code background */
+    --accent: #c084fc; /* Dark-mode accent */
+    --accent-bg: rgba(192, 132, 252, 0.15); /* Dark-mode accent tint */
+    --accent-border: rgba(192, 132, 252, 0.5); /* Dark-mode accent border */
+    --social-bg: rgba(47, 48, 58, 0.5); /* Dark-mode social chip background */
     --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px; /* Dark-mode shadow */
   }
 
+  /* Invert social button icons so they stay visible on dark backgrounds. */
   #social .button-icon {
-    filter: invert(1) brightness(2);
+    filter: invert(1) brightness(2); /* Lighten icons for dark mode */
   }
 }
 
+/* Remove the default body margin. */
 body {
-  margin: 0;
+  margin: 0; /* No outer margin */
 }
 
+/* #root: centered, bordered app container that fills the viewport height. */
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  width: 1126px; /* Preferred max content width */
+  max-width: 100%; /* Never overflow the viewport */
+  margin: 0 auto; /* Center horizontally */
+  text-align: center; /* Center inline content */
+  border-inline: 1px solid var(--border); /* Side borders */
+  min-height: 100svh; /* Fill the small-viewport height */
+  display: flex; /* Flex column layout */
+  flex-direction: column; /* Stack children vertically */
+  box-sizing: border-box; /* Include borders in width */
 }
 
+/* Shared heading typography for h1 and h2. */
 h1,
 h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+  font-family: var(--heading); /* Heading font stack */
+  font-weight: 500; /* Medium weight */
+  color: var(--text-h); /* High-contrast heading color */
 }
 
+/* Top-level heading sizing. */
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
+  font-size: 56px; /* Large heading size */
+  letter-spacing: -1.68px; /* Tighten large text */
+  margin: 32px 0; /* Vertical spacing */
+  /* Smaller h1 on mobile. */
   @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+    font-size: 36px; /* Reduced size on mobile */
+    margin: 20px 0; /* Reduced spacing on mobile */
   }
 }
+/* Secondary heading sizing. */
 h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
+  font-size: 24px; /* Subheading size */
+  line-height: 118%; /* Tighter line height */
+  letter-spacing: -0.24px; /* Slight tracking */
+  margin: 0 0 8px; /* Space below only */
+  /* Smaller h2 on mobile. */
   @media (max-width: 1024px) {
-    font-size: 20px;
+    font-size: 20px; /* Reduced size on mobile */
   }
 }
+/* Remove default paragraph margins. */
 p {
-  margin: 0;
+  margin: 0; /* No outer margin */
 }
 
+/* Shared monospace styling for inline code and the counter button. */
 code,
 .counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+  font-family: var(--mono); /* Monospace font */
+  display: inline-flex; /* Inline block that aligns contents */
+  border-radius: 4px; /* Rounded corners */
+  color: var(--text-h); /* High-contrast text */
 }
 
+/* Inline <code> chip styling. */
 code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  font-size: 15px; /* Slightly smaller than body */
+  line-height: 135%; /* Comfortable line height */
+  padding: 4px 8px; /* Inner spacing */
+  background: var(--code-bg); /* Subtle code background */
 }

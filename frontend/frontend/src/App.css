@@ -1,184 +1,216 @@
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
+/* App.css: layout and component styles for the App view. */
 
+/* Counter button: pill-shaped, accent-colored interactive button. */
+.counter {
+  font-size: 16px; /* Button label size */
+  padding: 5px 10px; /* Inner spacing */
+  border-radius: 5px; /* Rounded corners */
+  color: var(--accent); /* Accent text color */
+  background: var(--accent-bg); /* Subtle accent background */
+  border: 2px solid transparent; /* Invisible border reserved for hover */
+  transition: border-color 0.3s; /* Smooth border color change */
+  margin-bottom: 24px; /* Space below the button */
+
+  /* Show an accent border when hovered. */
   &:hover {
-    border-color: var(--accent-border);
+    border-color: var(--accent-border); /* Reveal border on hover */
   }
+  /* Visible focus ring for keyboard navigation. */
   &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
+    outline: 2px solid var(--accent); /* Accent focus outline */
+    outline-offset: 2px; /* Gap between element and outline */
   }
 }
 
+/* Hero: stacking context for the layered logo images. */
 .hero {
-  position: relative;
+  position: relative; /* Positioning context for absolute children */
 
+  /* Shared horizontal centering for all three logo layers. */
   .base,
   .framework,
   .vite {
-    inset-inline: 0;
-    margin: 0 auto;
+    inset-inline: 0; /* Stretch across to allow auto-centering */
+    margin: 0 auto; /* Center horizontally */
   }
 
+  /* Base hero image sits at the bottom of the stack. */
   .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
+    width: 170px; /* Fixed base width */
+    position: relative; /* Establish stacking position */
+    z-index: 0; /* Bottom layer */
   }
 
+  /* Framework and Vite logos overlay the base image. */
   .framework,
   .vite {
-    position: absolute;
+    position: absolute; /* Overlap the base image */
   }
 
+  /* React (framework) logo: tilted and scaled above the base. */
   .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
+    z-index: 1; /* Top layer */
+    top: 34px; /* Vertical offset */
+    height: 28px; /* Logo height */
     transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
+      scale(1.4); /* 3D tilt and enlarge */
   }
 
+  /* Vite logo: tilted and scaled below the React logo. */
   .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
+    z-index: 0; /* Sits behind the framework logo */
+    top: 107px; /* Vertical offset */
+    height: 26px; /* Logo height */
+    width: auto; /* Preserve aspect ratio */
     transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
+      scale(0.8); /* 3D tilt and shrink */
   }
 }
 
+/* #center: vertically centered hero column that grows to fill space. */
 #center {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
+  display: flex; /* Flexbox layout */
+  flex-direction: column; /* Stack children vertically */
+  gap: 25px; /* Space between children */
+  place-content: center; /* Center content on both axes */
+  place-items: center; /* Center items on both axes */
+  flex-grow: 1; /* Expand to fill available height */
 
+  /* Tighten spacing on smaller screens. */
   @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
+    padding: 32px 20px 24px; /* Reduced padding on mobile */
+    gap: 18px; /* Smaller gap on mobile */
   }
 }
 
+/* #next-steps: two-column row of docs and social panels. */
 #next-steps {
-  display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
+  display: flex; /* Side-by-side columns */
+  border-top: 1px solid var(--border); /* Divider above the section */
+  text-align: left; /* Left-align panel text */
 
+  /* Each direct child column shares equal width and padding. */
   & > div {
-    flex: 1 1 0;
-    padding: 32px;
+    flex: 1 1 0; /* Equal-width flexible columns */
+    padding: 32px; /* Inner spacing */
     @media (max-width: 1024px) {
-      padding: 24px 20px;
+      padding: 24px 20px; /* Reduced padding on mobile */
     }
   }
 
+  /* Section heading icons. */
   .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
+    margin-bottom: 16px; /* Space below the icon */
+    width: 22px; /* Icon width */
+    height: 22px; /* Icon height */
   }
 
+  /* Stack the columns vertically on smaller screens. */
   @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
+    flex-direction: column; /* Single column on mobile */
+    text-align: center; /* Center text on mobile */
   }
 }
 
+/* #docs: documentation column with a separating right border. */
 #docs {
-  border-right: 1px solid var(--border);
+  border-right: 1px solid var(--border); /* Divider between columns */
 
+  /* Swap the right divider for a bottom divider when stacked. */
   @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
+    border-right: none; /* Remove side divider on mobile */
+    border-bottom: 1px solid var(--border); /* Add bottom divider on mobile */
   }
 }
 
+/* Link lists inside the next-steps panels. */
 #next-steps ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
+  list-style: none; /* Remove bullet markers */
+  padding: 0; /* Remove default padding */
+  display: flex; /* Lay links out in a row */
+  gap: 8px; /* Space between links */
+  margin: 32px 0 0; /* Space above the list */
 
+  /* Small inline logo inside a link. */
   .logo {
-    height: 18px;
+    height: 18px; /* Logo height */
   }
 
+  /* Link chips: rounded, subtle background, hover shadow. */
   a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
+    color: var(--text-h); /* Heading text color */
+    font-size: 16px; /* Link text size */
+    border-radius: 6px; /* Rounded chip corners */
+    background: var(--social-bg); /* Subtle chip background */
+    display: flex; /* Align icon and label */
+    padding: 6px 12px; /* Inner spacing */
+    align-items: center; /* Vertically center contents */
+    gap: 8px; /* Space between icon and text */
+    text-decoration: none; /* Remove underline */
+    transition: box-shadow 0.3s; /* Smooth hover shadow */
 
+    /* Elevate the chip on hover. */
     &:hover {
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow); /* Drop shadow on hover */
     }
+    /* Inline button icon sizing. */
     .button-icon {
-      height: 18px;
-      width: 18px;
+      height: 18px; /* Icon height */
+      width: 18px; /* Icon width */
     }
   }
 
+  /* Wrap and center the link chips on smaller screens. */
   @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
+    margin-top: 20px; /* Reduced top margin on mobile */
+    flex-wrap: wrap; /* Allow chips to wrap */
+    justify-content: center; /* Center wrapped chips */
 
+    /* Two chips per row on mobile. */
     li {
-      flex: 1 1 calc(50% - 8px);
+      flex: 1 1 calc(50% - 8px); /* Half-width minus the gap */
     }
 
+    /* Full-width, centered chips on mobile. */
     a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
+      width: 100%; /* Fill the list item */
+      justify-content: center; /* Center contents */
+      box-sizing: border-box; /* Include padding in width */
     }
   }
 }
 
+/* #spacer: empty bottom strip with a top divider. */
 #spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
+  height: 88px; /* Spacer height */
+  border-top: 1px solid var(--border); /* Divider above the spacer */
   @media (max-width: 1024px) {
-    height: 48px;
+    height: 48px; /* Shorter spacer on mobile */
   }
 }
 
+/* .ticks: thin divider rendered with triangular end caps. */
 .ticks {
-  position: relative;
-  width: 100%;
+  position: relative; /* Positioning context for the caps */
+  width: 100%; /* Full available width */
 
+  /* Triangular caps drawn at each end via pseudo-elements. */
   &::before,
   &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
+    content: ''; /* Required to render pseudo-elements */
+    position: absolute; /* Position at the edges */
+    top: -4.5px; /* Vertical alignment of the caps */
+    border: 5px solid transparent; /* Transparent triangle base */
   }
 
+  /* Left cap points right using a colored left border. */
   &::before {
-    left: 0;
-    border-left-color: var(--border);
+    left: 0; /* Anchor to the left edge */
+    border-left-color: var(--border); /* Colored left-pointing triangle */
   }
+  /* Right cap points left using a colored right border. */
   &::after {
-    right: 0;
-    border-right-color: var(--border);
+    right: 0; /* Anchor to the right edge */
+    border-right-color: var(--border); /* Colored right-pointing triangle */
   }
 }
