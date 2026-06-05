@@ -19,7 +19,10 @@ public class PortfolioService {
     }
 
     public List<PortfolioDTO> getAllPortfolios() {
-        return portfolioRepository.findAll().stream().map(this::mapToDto).collect(Collectors.toList());
+        return portfolioRepository.findAll()
+                .stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 
     public PortfolioDTO getPortfolioById(Long id) {
@@ -28,7 +31,11 @@ public class PortfolioService {
     }
 
     private PortfolioDTO mapToDto(Portfolio portfolio) {
-        return new PortfolioDTO(portfolio.getId(), portfolio.getName(), portfolio.getTotalValue());
+
+        return new PortfolioDTO(
+                portfolio.getId(),
+                portfolio.getName(),
+                portfolio.getTotalValue()
+        );
     }
 }
-
