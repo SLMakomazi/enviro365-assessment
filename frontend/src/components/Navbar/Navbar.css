@@ -1,0 +1,34 @@
+.navbar-shell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 24px;
+  background: #1f2937;
+  color: #f9fafb;
+}
+
+.navbar-brand {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 12px;
+}
+
+.navbar-link {
+  border: none;
+  background: transparent;
+  color: #cbd5e1;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.navbar-link:hover,
+.navbar-link.active {
+  color: #fff;
+  background: rgba(148, 163, 184, 0.16);
+}

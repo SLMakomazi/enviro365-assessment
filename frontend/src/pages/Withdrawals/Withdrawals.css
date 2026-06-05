@@ -1,0 +1,16 @@
+.withdrawals-page {
+  display: grid;
+  gap: 24px;
+}
+
+.withdrawals-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: minmax(320px, 1fr) minmax(320px, 1.4fr);
+}
+
+@media (max-width: 900px) {
+  .withdrawals-grid {
+    grid-template-columns: 1fr;
+  }
+}

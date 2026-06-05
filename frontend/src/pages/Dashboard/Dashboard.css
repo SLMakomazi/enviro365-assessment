@@ -1,0 +1,27 @@
+.dashboard-page {
+  display: grid;
+  gap: 24px;
+}
+
+.dashboard-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.dashboard-title {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.dashboard-subtitle {
+  margin: 8px 0 0;
+  color: #475569;
+}
+
+.portfolio-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
