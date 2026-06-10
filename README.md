@@ -4,6 +4,16 @@ Overview
 
 This repository contains a simple full-stack assessment project (Enviro365) with a Java Spring Boot backend and a Vite + React frontend.
 
+AI Usage Disclosure
+
+This project was developed with assistance from AI tools (Cascade/Claude). All AI-generated code has been reviewed and understood by the developer. The AI assistance was used for:
+- Code generation and refactoring
+- Adding comments to frontend code
+- Implementing missing business rules and features
+- Writing unit tests
+
+The developer has full understanding of all code in this repository and can explain any design decisions or implementation details during follow-up discussions.
+
 Top-level layout
 
 - README.md (this file) — repo overview and how-to.

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component; // Component annotation
 import com.enviro.assessment.junior.siseko_makomazi.dto.WithdrawalRequestDTO; // Incoming withdrawal request
 import com.enviro.assessment.junior.siseko_makomazi.exception.AgeRestrictionException; // Age restriction exception
 import com.enviro.assessment.junior.siseko_makomazi.exception.InsufficientBalanceException; // Insufficient balance exception
+import com.enviro.assessment.junior.siseko_makomazi.model.Investor; // Investor entity
 
 @Component // Marks this as a Spring component for dependency injection
 public class WithdrawalValidator {
@@ -18,29 +19,36 @@ public class WithdrawalValidator {
     /**
      * Validates a withdrawal request against business rules
      * @param request The WithdrawalRequestDTO to validate
-     * @throws InsufficientBalanceException if amount <= 0 or > 10000
+     * @param investor The investor making the withdrawal
+     * @throws InsufficientBalanceException if amount <= 0, exceeds balance, or exceeds 90% limit
      * @throws IllegalArgumentException if reason is missing or blank
-     * @throws AgeRestrictionException if amount > 5000 (requires authorization)
+     * @throws AgeRestrictionException if investor age <= 65 for retirement withdrawals
      */
-    public void validate(WithdrawalRequestDTO request) {
+    public void validate(WithdrawalRequestDTO request, Investor investor) {
         // Rule 1: Amount must be positive
-        if (request.getAmount() <= 0) { // Check if amount is zero or negative
-            throw new InsufficientBalanceException("Withdrawal amount must be greater than zero."); // Throw error
+        if (request.getAmount() <= 0) {
+            throw new InsufficientBalanceException("Withdrawal amount must be greater than zero.");
         }
         
-        // Rule 2: Amount cannot exceed daily/transaction limit of 10000
-        if (request.getAmount() > 10000) { // Check if amount exceeds maximum limit
-            throw new InsufficientBalanceException("Requested amount exceeds the available balance."); // Throw error
+        // Rule 2: Withdrawal reason is required
+        if (request.getReason() == null || request.getReason().isBlank()) {
+            throw new IllegalArgumentException("Withdrawal reason is required.");
         }
         
-        // Rule 3: Withdrawal reason is required
-        if (request.getReason() == null || request.getReason().isBlank()) { // Check if reason is missing or empty
-            throw new IllegalArgumentException("Withdrawal reason is required."); // Throw error
+        // Rule 3: Withdrawal must not exceed available balance
+        if (request.getAmount() > investor.getBalance()) {
+            throw new InsufficientBalanceException("Withdrawal amount exceeds available balance.");
         }
         
-        // Rule 4: Large withdrawals (> 5000) require additional authorization
-        if (request.getAmount() > 5000) { // Check if amount exceeds authorization threshold
-            throw new AgeRestrictionException("Withdrawals above 5000 require additional authorization."); // Throw error
+        // Rule 4: Withdrawal must not exceed 90% of balance
+        double maxWithdrawal = investor.getBalance() * 0.9;
+        if (request.getAmount() > maxWithdrawal) {
+            throw new InsufficientBalanceException("Withdrawal amount cannot exceed 90% of available balance.");
+        }
+        
+        // Rule 5: Retirement withdrawals only allowed if age > 65
+        if (investor.getAge() <= 65) {
+            throw new AgeRestrictionException("Retirement withdrawals are only allowed for investors over 65 years of age.");
         }
     }
 }

@@ -8,26 +8,31 @@ package com.enviro.assessment.junior.siseko_makomazi.service; // Service layer p
 
 import com.enviro.assessment.junior.siseko_makomazi.dto.WithdrawalRequestDTO; // DTO for incoming withdrawal requests
 import com.enviro.assessment.junior.siseko_makomazi.dto.WithdrawalResponseDTO; // DTO for API responses
+import com.enviro.assessment.junior.siseko_makomazi.model.Investor; // Investor entity model
 import com.enviro.assessment.junior.siseko_makomazi.model.Withdrawal; // Entity model
-import com.enviro.assessment.junior.siseko_makomazi.repository.WithdrawalRepository; // Data access
+import com.enviro.assessment.junior.siseko_makomazi.repository.InvestorRepository; // Data access for investors
+import com.enviro.assessment.junior.siseko_makomazi.repository.WithdrawalRepository; // Data access for withdrawals
 import com.enviro.assessment.junior.siseko_makomazi.validation.WithdrawalValidator; // Business validation logic
 import org.springframework.stereotype.Service; // Service annotation
 
 import java.time.LocalDateTime; // For timestamp handling
 import java.util.List; // For returning lists
 import java.util.stream.Collectors; // For stream operations
+import java.util.stream.Stream; // For stream operations
 
 @Service // Marks this class as a business logic service component
 public class WithdrawalService {
 
     private final WithdrawalRepository withdrawalRepository; // Repository for database operations (injected)
+    private final InvestorRepository investorRepository; // Repository for investor data (injected)
     private final WithdrawalValidator withdrawalValidator; // Validator for business rules (injected)
 
     /**
-     * Constructor with dependency injection for repository and validator
+     * Constructor with dependency injection for repositories and validator
      */
-    public WithdrawalService(WithdrawalRepository withdrawalRepository, WithdrawalValidator withdrawalValidator) {
-        this.withdrawalRepository = withdrawalRepository; // Inject the repository dependency
+    public WithdrawalService(WithdrawalRepository withdrawalRepository, InvestorRepository investorRepository, WithdrawalValidator withdrawalValidator) {
+        this.withdrawalRepository = withdrawalRepository; // Inject the withdrawal repository dependency
+        this.investorRepository = investorRepository; // Inject the investor repository dependency
         this.withdrawalValidator = withdrawalValidator; // Inject the validator dependency
     }
 
@@ -44,12 +49,15 @@ public class WithdrawalService {
 
     /**
      * Processes a new withdrawal request: validates, creates, saves, and returns response
-     * @param request The WithdrawalRequestDTO containing amount and reason
+     * @param request The WithdrawalRequestDTO containing investorId, amount, and reason
      * @return WithdrawalResponseDTO with the saved withdrawal details and initial status
      * @throws RuntimeException if validation fails (from WithdrawalValidator)
      */
     public WithdrawalResponseDTO processWithdrawal(WithdrawalRequestDTO request) {
-        withdrawalValidator.validate(request); // Validate the request against business rules
+        Investor investor = investorRepository.findById(request.getInvestorId())
+                .orElseThrow(() -> new IllegalArgumentException("Investor not found"));
+        
+        withdrawalValidator.validate(request, investor); // Validate the request against business rules with investor data
         
         Withdrawal withdrawal = new Withdrawal(); // Create new withdrawal entity
         withdrawal.setAmount(request.getAmount()); // Set the requested withdrawal amount
@@ -73,6 +81,31 @@ public class WithdrawalService {
                 withdrawal.getStatus(), // Current status (Pending/Approved/Rejected/Completed)
                 withdrawal.getRequestedAt().toString() // Request timestamp as string
         );
+    }
+
+    /**
+     * Exports withdrawal records to CSV format with optional status filtering
+     * @param status Optional status filter (e.g., Pending, Approved, Completed)
+     * @return CSV string containing withdrawal records
+     */
+    public String exportWithdrawalsToCsv(String status) {
+        Stream<Withdrawal> withdrawalStream = withdrawalRepository.findAll().stream(); // Get all withdrawals
+        
+        if (status != null && !status.isEmpty()) { // Apply status filter if provided
+            withdrawalStream = withdrawalStream.filter(w -> w.getStatus().equalsIgnoreCase(status)); // Filter by status
+        }
+        
+        StringBuilder csv = new StringBuilder(); // Build CSV content
+        csv.append("ID,Amount,Status,RequestedAt\n"); // CSV header
+        
+        withdrawalStream.forEach(w -> { // Append each withdrawal as CSV row
+            csv.append(w.getId()).append(","); // ID
+            csv.append(w.getAmount()).append(","); // Amount
+            csv.append(w.getStatus()).append(","); // Status
+            csv.append(w.getRequestedAt()).append("\n"); // Request timestamp
+        });
+        
+        return csv.toString(); // Return CSV string
     }
 }
 

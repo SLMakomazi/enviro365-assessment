@@ -1,12 +1,40 @@
+import { useState, useEffect } from 'react';
+import { fetchHistory } from '../../services/apiService';
 import './History.css';
 
-const historyItems = [
-  { id: 'h1', title: 'Monthly earnings update', date: '2026-05-30' },
-  { id: 'h2', title: 'Withdrawal request approved', date: '2026-06-01' },
-  { id: 'h3', title: 'Account summary generated', date: '2026-06-04' },
-];
-
 function History() {
+  const [historyItems, setHistoryItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadHistory = async () => {
+      try {
+        const data = await fetchHistory();
+        const formattedData = data.map((item) => ({
+          id: item.id,
+          title: item.title || item.reason || 'Transaction',
+          date: item.date || item.requestedAt?.split('T')[0] || new Date().toISOString().slice(0, 10),
+        }));
+        setHistoryItems(formattedData);
+      } catch (error) {
+        console.error('Failed to fetch history:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadHistory();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="history-page section-card">
+        <h1 className="history-title">History</h1>
+        <p className="history-description">Loading...</p>
+      </section>
+    );
+  }
+
   return (
     <section className="history-page section-card">
       <h1 className="history-title">History</h1>

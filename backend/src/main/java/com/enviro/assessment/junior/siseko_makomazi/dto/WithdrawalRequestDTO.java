@@ -12,6 +12,7 @@ package com.enviro.assessment.junior.siseko_makomazi.dto; // DTO layer package
  */
 public class WithdrawalRequestDTO {
 
+    private Long investorId; // Investor ID making the withdrawal (mutable for deserialization)
     private double amount; // Withdrawal amount requested (mutable for deserialization)
     private String reason; // Reason for withdrawal (mutable for deserialization)
 
@@ -24,12 +25,30 @@ public class WithdrawalRequestDTO {
 
     /**
      * Constructor to create WithdrawalRequestDTO with all fields
+     * @param investorId ID of the investor making the withdrawal
      * @param amount Amount to withdraw
      * @param reason Reason for the withdrawal
      */
-    public WithdrawalRequestDTO(double amount, String reason) {
+    public WithdrawalRequestDTO(Long investorId, double amount, String reason) {
+        this.investorId = investorId; // Set investor ID
         this.amount = amount; // Set withdrawal amount
         this.reason = reason; // Set withdrawal reason
+    }
+
+    /**
+     * Getter for investor ID
+     * @return ID of the investor
+     */
+    public Long getInvestorId() {
+        return investorId; // Return investor ID
+    }
+
+    /**
+     * Setter for investor ID
+     * @param investorId The investor ID
+     */
+    public void setInvestorId(Long investorId) {
+        this.investorId = investorId; // Update investor ID
     }
 
     /**

@@ -8,11 +8,14 @@ package com.enviro.assessment.junior.siseko_makomazi.controller; // Controller l
 
 import java.util.List; // For returning lists
 
+import org.springframework.http.HttpHeaders; // HTTP headers for CSV download
+import org.springframework.http.MediaType; // Media types for CSV
 import org.springframework.http.ResponseEntity; // HTTP response wrapper
 import org.springframework.web.bind.annotation.GetMapping; // HTTP GET annotation
 import org.springframework.web.bind.annotation.PostMapping; // HTTP POST annotation
 import org.springframework.web.bind.annotation.RequestBody; // Request body annotation
 import org.springframework.web.bind.annotation.RequestMapping; // Base URL path mapping
+import org.springframework.web.bind.annotation.RequestParam; // Request parameter annotation
 import org.springframework.web.bind.annotation.RestController; // REST controller annotation
 
 import com.enviro.assessment.junior.siseko_makomazi.dto.WithdrawalRequestDTO; // DTO for incoming requests
@@ -43,10 +46,29 @@ public class WithdrawalController {
     }
 
     /**
+     * GET endpoint to export withdrawals as CSV with optional filtering
+     * HTTP GET /api/withdrawals/export?status=Pending
+     * @param status Optional status filter (e.g., Pending, Approved, Completed)
+     * @return ResponseEntity with CSV file and HTTP 200 OK
+     */
+    @GetMapping("/export") // Maps to HTTP GET request at /api/withdrawals/export
+    public ResponseEntity<String> exportWithdrawalsToCsv(@RequestParam(required = false) String status) {
+        String csv = withdrawalService.exportWithdrawalsToCsv(status); // Generate CSV with optional filter
+        
+        HttpHeaders headers = new HttpHeaders(); // Create response headers
+        headers.setContentType(MediaType.TEXT_PLAIN); // Set content type to plain text
+        headers.setContentDispositionFormData("attachment", "withdrawals.csv"); // Set file download header
+        
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(csv); // Return CSV content
+    }
+
+    /**
      * POST endpoint to submit a new withdrawal request
      * HTTP POST /api/withdrawals
-     * Request body contains amount and reason for withdrawal
-     * @param request WithdrawalRequestDTO with amount and reason
+     * Request body contains investorId, amount and reason for withdrawal
+     * @param request WithdrawalRequestDTO with investorId, amount and reason
      * @return ResponseEntity with WithdrawalResponseDTO containing saved withdrawal details and HTTP 200 OK
      * @throws RuntimeException if validation fails (insufficient balance, invalid amount, etc.)
      */

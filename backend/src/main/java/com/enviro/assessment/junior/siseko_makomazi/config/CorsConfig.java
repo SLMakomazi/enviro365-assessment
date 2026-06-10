@@ -21,10 +21,11 @@ public class CorsConfig implements WebMvcConfigurer { // Implements interface to
      */
     @Override // Override method from WebMvcConfigurer interface
     public void addCorsMappings(@NonNull CorsRegistry registry) { // @NonNull indicates registry cannot be null
-        registry.addMapping("/api/**") // Apply CORS to all /api/** endpoints
-                .allowedOrigins("*") // Allow requests from any origin (for development)
+        registry.addMapping("/**") // Apply CORS to all endpoints
+                .allowedOrigins("http://localhost:5173", "http://localhost:3000") // Allow frontend origins
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allow these HTTP methods
-                .allowedHeaders("*"); // Allow any request headers (e.g., Authorization, Content-Type)
+                .allowedHeaders("*") // Allow any request headers (e.g., Authorization, Content-Type)
+                .allowCredentials(true); // Allow credentials
     }
 }
 

@@ -1,7 +1,7 @@
 import axiosClient from '../api/axiosClient';
 
 export const fetchPortfolio = async () => {
-  const response = await axiosClient.get('/portfolio');
+  const response = await axiosClient.get('/portfolios');
   return response.data;
 };
 
@@ -17,5 +17,14 @@ export const fetchWithdrawals = async () => {
 
 export const fetchHistory = async () => {
   const response = await axiosClient.get('/history');
+  return response.data;
+};
+
+export const exportWithdrawalsCsv = async (status) => {
+  const params = status ? { status } : {};
+  const response = await axiosClient.get('/withdrawals/export', {
+    params,
+    responseType: 'blob'
+  });
   return response.data;
 };

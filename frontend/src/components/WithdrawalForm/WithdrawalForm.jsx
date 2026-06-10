@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './WithdrawalForm.css';
 import { isRequired, isValidAmount } from '../../utils/validators';
 
-function WithdrawalForm({ onSubmit }) {
+function WithdrawalForm({ onSubmit, investorId = 1 }) {
   const [amount, setAmount] = useState('');
   const [reason, setReason] = useState('');
   const [error, setError] = useState('');
@@ -18,7 +18,7 @@ function WithdrawalForm({ onSubmit }) {
       return;
     }
     setError('');
-    onSubmit({ amount: Number(amount), reason });
+    onSubmit({ investorId, amount: Number(amount), reason });
     setAmount('');
     setReason('');
   };

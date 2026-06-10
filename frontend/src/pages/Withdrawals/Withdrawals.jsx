@@ -1,22 +1,59 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { fetchWithdrawals, submitWithdrawal } from '../../services/apiService';
 import WithdrawalForm from '../../components/WithdrawalForm/WithdrawalForm';
 import WithdrawalTable from '../../components/WithdrawalTable/WithdrawalTable';
 import './Withdrawals.css';
 
-const initialWithdrawals = [
-  { id: '1', date: '2026-05-12', amount: '$1,450', status: 'Completed' },
-  { id: '2', date: '2026-06-01', amount: '$2,560', status: 'Pending' },
-];
-
 function Withdrawals() {
-  const [withdrawals, setWithdrawals] = useState(initialWithdrawals);
+  const [withdrawals, setWithdrawals] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleSubmit = (payload) => {
-    setWithdrawals((current) => [
-      { id: String(current.length + 1), date: new Date().toISOString().slice(0, 10), amount: `$${payload.amount}`, status: 'Pending' },
-      ...current,
-    ]);
+  useEffect(() => {
+    const loadWithdrawals = async () => {
+      try {
+        const data = await fetchWithdrawals();
+        const formattedData = data.map((item) => ({
+          id: item.id,
+          date: item.requestedAt ? item.requestedAt.split('T')[0] : new Date().toISOString().slice(0, 10),
+          amount: `$${item.amount.toFixed(2)}`,
+          status: item.status,
+        }));
+        setWithdrawals(formattedData);
+      } catch (error) {
+        console.error('Failed to fetch withdrawals:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadWithdrawals();
+  }, []);
+
+  const handleSubmit = async (payload) => {
+    try {
+      const response = await submitWithdrawal(payload);
+      const newWithdrawal = {
+        id: response.id,
+        date: response.requestedAt ? response.requestedAt.split('T')[0] : new Date().toISOString().slice(0, 10),
+        amount: `$${response.amount.toFixed(2)}`,
+        status: response.status,
+      };
+      setWithdrawals((current) => [newWithdrawal, ...current]);
+    } catch (error) {
+      console.error('Failed to submit withdrawal:', error);
+      alert('Failed to submit withdrawal. Please try again.');
+    }
   };
+
+  if (loading) {
+    return (
+      <section className="withdrawals-page section-card">
+        <div className="withdrawals-grid">
+          <div>Loading...</div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="withdrawals-page section-card">
